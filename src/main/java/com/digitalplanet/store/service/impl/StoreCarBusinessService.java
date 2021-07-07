@@ -6,6 +6,7 @@ import com.digitalplanet.store.model.CarResponse;
 import com.digitalplanet.store.repository.CarRepository;
 import com.digitalplanet.store.service.spec.CarBusinessService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,10 +22,10 @@ public class StoreCarBusinessService implements CarBusinessService {
                      .model(carSaveRequest.getModel())
                      .productionYear(carSaveRequest.getProductionYear())
                      .build();
-        Car persistedEntity=carRepository.save(car);
+        Car persistedEntity = carRepository.save(car);
 
-
-        return CarResponse.builder().maker(persistedEntity.getMaker())
+        return CarResponse.builder()
+                          .maker(persistedEntity.getMaker())
                           .model(persistedEntity.getModel())
                           .productionYear(persistedEntity.getProductionYear())
                           .build();
@@ -32,6 +33,12 @@ public class StoreCarBusinessService implements CarBusinessService {
 
     @Override
     public CarResponse getCarById(Long id) {
-        return null;
+        Car car = carRepository.findById(id)
+                               .orElseThrow(() -> new ExpressionException("e"));
+        return CarResponse.builder()
+                          .maker(car.getMaker())
+                          .model(car.getModel())
+                          .productionYear(car.getProductionYear())
+                          .build();
     }
 }

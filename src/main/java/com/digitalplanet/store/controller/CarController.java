@@ -13,13 +13,12 @@ public class CarController {
 
     private final CarBusinessService carBusinessService;
 
-    @GetMapping
+    @GetMapping("/car/{id}")
     public ResponseEntity<CarResponse> getCarById(@PathVariable Long id) {
-        // TODO
-        return null;
+        return ResponseEntity.ok(carBusinessService.getCarById(id));
     }
 
-    @PostMapping(path = "/car")
+    @PostMapping("/car")
     public ResponseEntity<CarResponse> saveCar(@RequestBody CarRequest carSaveRequest) {
         return ResponseEntity.ok(carBusinessService.saveCar(carSaveRequest));
     }
